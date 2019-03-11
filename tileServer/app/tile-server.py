@@ -7,6 +7,7 @@ import psycopg2
 import time
 import yaml
 import datetime
+from flask import request
 
 from flask import Flask, redirect, make_response
 app = Flask(__name__)
@@ -17,11 +18,11 @@ CACHE_DIR = os.path.join(BASE_DIR,'cache')
 queryTemplate = """
     SELECT ST_AsMVT(tile, '{}', 4096, 'geom')
     FROM (
-      SELECT {}.*, ST_AsMVTGeom(
+      SELECT import.osm_{}.*, ST_AsMVTGeom(
         geometry,
         ST_transform(ST_SetSRID(ST_Makebox2d(ST_Point({},{}),ST_Point({},{})), 4326),3857)
       ) AS geom
-      FROM import.{}
+      FROM import.osm_{}
       WHERE geometry && ST_transform(ST_SetSRID(ST_Makebox2d(ST_Point({},{}),ST_Point({},{})), 4326),3857)
     )
     AS tile;
@@ -39,7 +40,7 @@ def tile_ul(x, y, z):
 def getTablesForZoom(z):
     return defaultTablesByZoom.get(z, [])
 
-def get_tile(z,x,y, tableName):
+def get_tile(z,x,y, tableName, useCache):
 
     xmin,ymin = tile_ul(x, y, z)
     xmax,ymax = tile_ul(x + 1, y + 1, z)
@@ -51,7 +52,14 @@ def get_tile(z,x,y, tableName):
     tilefolder = "{}/{}/{}/{}".format(CACHE_DIR,tableName,z,x)
     tilepath = "{}/{}.pbf".format(tilefolder,y)
 
-    if not os.path.exists(tilepath):
+    cacheVersionAvailable = os.path.exists(tilepath)
+
+    if cacheVersionAvailable and not useCache:
+        os.remove(tilepath)
+        cacheVersionAvailable = False
+
+
+    if not cacheVersionAvailable :
         startGenerate = time.time()
         conn = psycopg2.connect('dbname=tiles user=tiles password=Uf8yQECNtJgPAicUwrZHsBoyB8SgDcEaiGfexsziUCsJzR3KyW73FpsAPQMYyfe host=tileserver-postgis')
         cur = conn.cursor()
@@ -88,7 +96,8 @@ def index():
 @app.route('/tiles/<int:z>/<int:x>/<int:y>.pbf', methods=['GET'])
 @app.route('/tiles/<string:tableName>/<int:z>/<int:x>/<int:y>.pbf', methods=['GET'])
 def tiles(tableName=None,z=0, x=0, y=0):
-    tile = get_tile(z, x, y, tableName)
+    useCache = request.args.get('cache', default = True, type = bool)
+    tile = get_tile(z, x, y, tableName, useCache)
     if (len(tile) > 0):
         response = make_response(tile)
     else:
