@@ -45,7 +45,15 @@ def get_tile(z,x,y, tableName, useCache):
     xmin,ymin = tile_ul(x, y, z)
     xmax,ymax = tile_ul(x + 1, y + 1, z)
 
-    tables = getTablesForZoom(z) if tableName is None else tableName
+    defaultTables = getTablesForZoom(z)
+
+    if tableName is None:
+        tables = defaultTables
+    else:
+        if tableName in defaultTables:
+            tables = [tableName]
+        else:
+            tables = []
 
     tile = None
 
