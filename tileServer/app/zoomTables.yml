@@ -14,8 +14,12 @@ places:
   min: 3
   max: 16
   enabled: true
-roads:
-  min: 0
+roads_big:
+  min: 5
+  max: 13
+  enabled: true
+roads_small:
+  min: 12
   max: 24
   enabled: true
 shops:
