@@ -47,6 +47,6 @@ waterareas:
   max: 24
   enabled: true
 waterways:
-  min: 0
+  min: 7
   max: 24
   enabled: true
