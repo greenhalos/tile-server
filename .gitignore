@@ -3,3 +3,5 @@ import/imposm.tar.gz
 import/imposm/
 
 tileServer/cache/
+.~lock.*
+loadtest/result.csv
