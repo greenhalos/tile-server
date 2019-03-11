@@ -1,0 +1,14 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: tileserver
+spec:
+  rules:
+    - host: tile-server.tld
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: tileserver
+              servicePort: 80

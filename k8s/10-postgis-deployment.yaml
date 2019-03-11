@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tileserver-postgis
+spec:
+  selector:
+    matchLabels:
+      app: tileserver-postgis
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: tileserver-postgis
+    spec:
+      containers:
+        - image: kartoza/postgis:11.0-2.5
+          name: tileserver-postgis
+          env:
+            - name: POSTGRES_USER
+              value: tiles
+            - name: POSTGRES_PASS
+              value: Uf8yQECNtJgPAicUwrZHsBoyB8SgDcEaiGfexsziUCsJzR3KyW73FpsAPQMYyfe
+            - name: POSTGRES_DBNAME
+              value: tiles
+            - name: ALLOW_IP_RANGE
+              value: 0.0.0.0/0
+          ports:
+            - containerPort: 5432
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: tileserver-postgis
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: tileserver-postgis
+  clusterIP: None

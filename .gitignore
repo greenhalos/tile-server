@@ -1,0 +1,5 @@
+import/data.osm.pbf
+import/imposm.tar.gz
+import/imposm/
+
+tileServer/cache/

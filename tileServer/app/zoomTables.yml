@@ -1,0 +1,48 @@
+admin:
+  min: 0
+  max: 24
+  enabled: false
+airports:
+  min: 0
+  max: 24
+  enabled: false
+amenities:
+  min: 0
+  max: 24
+  enabled: false
+places:
+  min: 3
+  max: 16
+  enabled: true
+roads:
+  min: 0
+  max: 24
+  enabled: true
+shops:
+  min: 0
+  max: 24
+  enabled: false
+transport_areas:
+  min: 0
+  max: 24
+  enabled: false
+transport_points:
+  min: 0
+  max: 24
+  enabled: false
+buildings:
+  min: 13
+  max: 24
+  enabled: true
+housenumbers:
+  min: 0
+  max: 24
+  enabled: false
+waterareas:
+  min: 0
+  max: 24
+  enabled: true
+waterways:
+  min: 0
+  max: 24
+  enabled: true

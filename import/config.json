@@ -1,0 +1,4 @@
+{
+    "connection": "postgis://tiles:Uf8yQECNtJgPAicUwrZHsBoyB8SgDcEaiGfexsziUCsJzR3KyW73FpsAPQMYyfe@tileserver-postgis/tiles",
+    "mapping": "mapping.yml"
+}

@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tileserver
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tileserver
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: tileserver
+    spec:
+      containers:
+        - image: greenhalos/tile-server:latest
+          name: tileserver
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: tileserver
+spec:
+  type: LoadBalancer
+  selector:
+    app: tileserver
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
