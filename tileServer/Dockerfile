@@ -6,12 +6,12 @@ WORKDIR /home/tiles
 
 RUN apk add postgresql-dev gcc musl-dev
 
-COPY requirements.txt /tmp/
+COPY ./tileServer/requirements.txt /tmp/
 
 RUN pip install -U pip
 RUN pip install -r /tmp/requirements.txt
 
-COPY ./app /home/tiles
+COPY ./tileServer/app /home/tiles
 
 USER tiles
 

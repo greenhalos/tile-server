@@ -14,7 +14,7 @@ RUN mv imposm-0.6.0-alpha.4-linux-x86-64 imposm
 
 RUN wget -nv -O data.osm.pbf http://download.geofabrik.de/europe/germany/baden-wuerttemberg/karlsruhe-regbez-latest.osm.pbf
 
-ADD mapping.yml /code
-ADD config.json /code
+ADD import/mapping.yml /code
+ADD import/config.json /code
 
 CMD ["imposm/imposm", "import", "-config", "./config.json", "-read", "./data.osm.pbf", "-write", "-overwritecache"]
