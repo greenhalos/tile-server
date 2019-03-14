@@ -14,11 +14,15 @@ places:
   min: 3
   max: 16
   enabled: true
-roads_big:
+roads_gen0:
   min: 5
+  max: 9
+  enabled: true
+roads_gen1:
+  min: 9
   max: 13
   enabled: true
-roads_small:
+roads:
   min: 12
   max: 24
   enabled: true

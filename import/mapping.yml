@@ -1,3 +1,33 @@
+areas:
+  area_tags: [buildings, landuse, leisure, natural, aeroway]
+  linear_tags: [highway, barrier]
+generalized_tables:
+  roads_gen0:
+    source: roads_gen1
+    tolerance: 200.0
+  roads_gen1:
+    source: roads
+    sql_filter:
+      type IN (
+        'motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary',
+        'primary_link', 'secondary', 'secondary_link', 'tertiary', 'tertiary_link')
+      OR class IN('railway')
+    tolerance: 50.0
+  waterareas_gen0:
+    source: waterareas_gen1
+    sql_filter: ST_Area(geometry)>500000.000000
+    tolerance: 200.0
+  waterareas_gen1:
+    source: waterareas
+    sql_filter: ST_Area(geometry)>50000.000000
+    tolerance: 50.0
+  waterways_gen0:
+    source: waterways_gen1
+    tolerance: 200
+  waterways_gen1:
+    source: waterways
+    tolerance: 50.0
+
 tags:
   load_all: true
   exclude:
@@ -217,7 +247,7 @@ tables:
       - suburb
       - locality
     type: point
-  roads_small:
+  roads:
     fields:
     - name: osm_id
       type: id
@@ -251,10 +281,6 @@ tables:
       type: string
     - name: class
       type: mapping_key
-    filters:
-      exclude_tags:
-      - - area
-        - 'yes'
     mappings:
       railway:
         mapping:
@@ -293,76 +319,6 @@ tables:
           - living_street
           - unclassified
           - residential
-          - raceway
-          man_made:
-          - pier
-          - groyne
-    type: linestring
-  roads_big:
-    fields:
-    - name: osm_id
-      type: id
-    - name: geometry
-      type: geometry
-    - name: type
-      type: mapping_value
-    - key: name
-      name: name
-      type: string
-    - key: tunnel
-      name: tunnel
-      type: boolint
-    - key: bridge
-      name: bridge
-      type: boolint
-    - key: oneway
-      name: oneway
-      type: direction
-    - key: ref
-      name: ref
-      type: string
-    - key: layer
-      name: z_order
-      type: wayzorder
-    - key: access
-      name: access
-      type: string
-    - key: service
-      name: service
-      type: string
-    - name: class
-      type: mapping_key
-    filters:
-      exclude_tags:
-      - - area
-        - 'yes'
-    mappings:
-      railway:
-        mapping:
-          railway:
-          - rail
-          - tram
-          - light_rail
-          - subway
-          - narrow_gauge
-          - preserved
-          - funicular
-          - monorail
-          - disused
-      roads:
-        mapping:
-          highway:
-          - motorway
-          - motorway_link
-          - trunk
-          - trunk_link
-          - primary
-          - primary_link
-          - secondary
-          - secondary_link
-          - tertiary
-          - tertiary_link
-          - road
           - raceway
           man_made:
           - pier
