@@ -5,3 +5,4 @@ import/imposm/
 tileServer/cache/
 .~lock.*
 loadtest/result.csv
+**/__pycache__

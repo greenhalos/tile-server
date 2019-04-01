@@ -61,13 +61,16 @@ def get_tile(z,x,y, tableName, useCache):
     tilepath = "{}/{}.pbf".format(tilefolder,y)
 
     cacheVersionAvailable = os.path.exists(tilepath)
+    print("Tile exists in cache: {}".format(cacheVersionAvailable))
 
     if cacheVersionAvailable and not useCache:
+        print("deleting tile")
         os.remove(tilepath)
         cacheVersionAvailable = False
 
 
     if not cacheVersionAvailable :
+        print("creating tile")
         startGenerate = time.time()
         conn = psycopg2.connect('dbname=tiles user=tiles password=Uf8yQECNtJgPAicUwrZHsBoyB8SgDcEaiGfexsziUCsJzR3KyW73FpsAPQMYyfe host=tileserver-postgis')
         cur = conn.cursor()

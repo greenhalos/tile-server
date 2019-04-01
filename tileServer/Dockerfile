@@ -1,19 +1,23 @@
-FROM python:3.7-alpine
+FROM python:3.7.3-slim-stretch
 
-RUN adduser -D tiles
+ENV HOME=/opt/repo
 
-WORKDIR /home/tiles
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install -y wget gnupg2
 
-RUN apk add postgresql-dev gcc musl-dev
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 
-COPY ./tileServer/requirements.txt /tmp/
+RUN apt-get update
+RUN apt-get install -y python3 python3-pip postgresql-server-dev-10 gcc musl-dev
 
-RUN pip install -U pip
-RUN pip install -r /tmp/requirements.txt
+COPY ./docker-entrypoint.sh ${HOME}/docker-entrypoint.sh
 
-COPY ./tileServer/app /home/tiles
+COPY ./requirements.txt /tmp/
+RUN pip3 install -U pip
+RUN pip3 install -r /tmp/requirements.txt
 
-USER tiles
+COPY ./app ${HOME}/app
 
-EXPOSE 5000
-ENTRYPOINT ["python", "./tile-server.py"]
+WORKDIR ${HOME}
+ENTRYPOINT ["./docker-entrypoint.sh"]

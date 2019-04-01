@@ -1,11 +1,10 @@
 ---
 apiVersion: apps/v1beta1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: tileserver
 spec:
   replicas: 1
-  serviceName: tileserver
   selector:
     matchLabels:
       app: tileserver
